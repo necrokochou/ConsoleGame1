@@ -1,0 +1,46 @@
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]estResults/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Visual Studio Code (if sometimes used)
+.vscode/
+
+# Rider settings
+.idea/
+*.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+artifacts/
+packages/
+
+# Cache
+*.dbmdl
+*.dbproj.schemaview
+*.pdb
+*.cache
+*.log
+
+# Others
+_ReSharper*/
+*.DotSettings.user
