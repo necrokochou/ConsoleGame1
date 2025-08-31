@@ -12,15 +12,21 @@ class Program {
         //
         // World.Entities.AddRange(frieren, fern, ubel);
         
-        var mage1 = new Character("mage1", 100, 100, [new Zoltraak("mage1")]);
+        var hero1 = new Character("hero1", 100, 100, [new Zoltraak("hero1")]);
         var mage2 = new Character("mage2", 100, 100, [new Fireball("mage2"), new IceShard("mage2")]);
         var mage3 = new Character("mage3", 100, 100, [new IceShard("mage3"), new Reelseiden("mage3")]);;
 
-        World.Entities.AddRange(mage1, mage2, mage3);
+        var bow = new BowItem("bow", 30f);
+        hero1.StoreItem(bow);
+        var sword = new SwordItem("sword", 20f);
+        mage2.StoreItem(sword);
+        mage3.StoreItem(sword);
+        
+        World.Entities.AddRange(hero1, mage2, mage3);
         
         World.SetRandomSpeed();
 
-        var turnOrder = new List<Entity>(World.Entities).OrderBy(e => e.Speed).ToList();
+        var turnOrder = new List<Entity>(World.Entities).OrderByDescending(e => e.Speed).ToList();
         
         int turn = 0;
 
@@ -33,6 +39,7 @@ class Program {
             currentTurn.Display();
             if (currentTurn is Character character)
                 character.UseSkill();
+                // character.UseItem();
             else if (currentTurn is Enemy enemy)
                 enemy.UseRandomSkill();
 
@@ -100,6 +107,7 @@ class Entity {
     private Attribute? mana;
     private int speed;
     private List<Skill>? skills;
+    private List<Item>? inventory = [];
 
     public string Name {
         get => name;
@@ -121,11 +129,17 @@ class Entity {
         get => skills;
         protected set => skills = value;
     }
+    
+    public List<Item> Inventory {
+        get => inventory;
+        protected set => inventory = value;
+    }
 
     public void Display() {
         Console.WriteLine($"Name: {Util.Capitalize(name)}");
         health.Display();
         mana.Display();
+        Console.WriteLine($"Speed: {speed}");
         Console.Write("Skills: ");
         for (int i = 0; i < skills.Count; i++) {
             Console.Write(Util.Titlecase(skills[i].Name));
@@ -138,6 +152,10 @@ class Entity {
 
     public void SetSpeed(int amount) {
         Speed = amount;
+    }
+
+    public void StoreItem(Item item) {
+        inventory.Add(item);
     }
 }
 
@@ -170,6 +188,22 @@ class Character : Entity {
         skill.Cast(target.Name);
         Console.WriteLine($"{Util.Capitalize(Name)} used {Util.Titlecase(skill.Name)} on {Util.Capitalize(target.Name)}");
         Div.Y();
+    }
+
+    public void UseItem() {
+        Console.Write("Select item > ");
+        var itemName = Console.ReadLine();
+
+        foreach (var item in Inventory) {
+            if (item.Name == itemName) {
+                if (item.NeedsTarget) {
+                    Console.Write("Select target > ");
+                    var targetName = Console.ReadLine();
+                    
+                    item.Use(targetName);
+                }
+            }
+        }
     }
 }
 
@@ -307,4 +341,87 @@ class Fireball : Skill {
 
 class IceShard : Skill {
     public IceShard(string ownerName) : base(ownerName, "ice shard", 25f, 10f, "mana", 3) {}
+}
+
+
+abstract class Item {
+    public Item(string name, bool needsTarget) {
+        this.name = name;
+        this.needsTarget = needsTarget;
+    }
+    
+    private string name;
+    private int count;
+    private bool needsTarget;
+    
+    public string Name {
+        get => name;
+    }
+    public int Count {
+        get => count;
+    }
+    public bool NeedsTarget {
+        get => needsTarget;
+    }
+
+    public abstract void Use(string targetName);
+}
+
+
+class SwordItem : Item {
+    public SwordItem(string name, float damage) : base(name, true) {
+        this.damage = damage;
+    }
+    
+    private float damage;
+    
+    public float Damage {
+        get => damage;
+    }
+
+    public override void Use(string targetName) {
+        var target = GetTarget(targetName);
+        
+        Console.WriteLine();
+        target.Health.Decrease(damage);
+    }
+
+    private Entity GetTarget(string name) {
+        foreach (var entity in World.Entities) {
+            if (entity.Name == name) {
+                return entity;
+            }
+        }
+        
+        return null;
+    }
+}
+
+class BowItem : Item {
+    public BowItem(string name, float damage) : base(name, true) {
+        this.damage = damage;
+    }
+    
+    private float damage;
+    
+    public float Damage {
+        get => damage;
+    }
+
+    public override void Use(string targetName) {
+        var target = GetTarget(targetName);
+        
+        Console.WriteLine();
+        target.Health.Decrease(damage);
+    }
+
+    private Entity GetTarget(string name) {
+        foreach (var entity in World.Entities) {
+            if (entity.Name == name) {
+                return entity;
+            }
+        }
+        
+        return null;
+    }
 }
