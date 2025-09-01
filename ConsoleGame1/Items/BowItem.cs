@@ -1,4 +1,5 @@
 ﻿using ConsoleGame1.Core;
+using ConsoleGame1.Utils;
 
 
 namespace ConsoleGame1.Items;
@@ -18,7 +19,7 @@ class BowItem : Item {
     public override void Use(string targetName) {
         var target = GetTarget(targetName);
         
-        Console.WriteLine();
+        Util.Spacer.Y();
         target.Health.Decrease(damage);
     }
 

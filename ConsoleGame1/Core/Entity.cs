@@ -6,7 +6,7 @@ using ConsoleGame1.Utils;
 namespace ConsoleGame1.Core;
 
 
-abstract class Entity {
+public abstract class Entity : ICanUseSpell, ICanUseItem{
     public Entity(string name, int health, int mana) {
         Name = name;
         Health = new Attribute("health", health);
@@ -20,6 +20,7 @@ abstract class Entity {
     private int speed;
     private List<Spell>? spellBook = [];
     private List<Item>? inventory = [];
+    private Team team;
 
     public string Name {
         get => name;
@@ -39,46 +40,59 @@ abstract class Entity {
     }
     public List<Spell> SpellBook {
         get => spellBook;
-        protected set => spellBook = value;
     }
-    
     public List<Item> Inventory {
         get => inventory;
-        protected set => inventory = value;
+    }
+    public Team Team {
+        get => team;
+    }
+    
+    public bool IsAlive {
+        get => Health.Value > 0;
+    }
+    public bool IsDead {
+        get => !IsAlive;
     }
 
     public void Display() {
-        Console.WriteLine($"Name: {Util.Capitalize(name)}");
-        health.Display();
-        mana.Display();
-        Console.WriteLine($"Speed: {speed}");
+        Util.Print($"Name: {Util.Capitalize(Name)}");
+        Health.Display();
+        Mana.Display();
+        Util.Print($"Speed: {speed}");
         Console.Write("Skills: ");
-        for (int i = 0; i < spellBook.Count; i++) {
-            Console.Write(Util.Titlecase(spellBook[i].Name));
-            if (i + 1 < spellBook.Count) {
+        for (int i = 0; i < SpellBook.Count; i++) {
+            Console.Write(Util.Titlecase(SpellBook[i].Name));
+            if (i + 1 < SpellBook.Count) {
                 Console.Write(", ");
             }
         }
-        Div.Y(2);
+        Util.Spacer.Y();
+        Util.Print($"Team: {Team}");
+        Util.Spacer.Y(2);
     }
 
     public void SetSpeed(int amount) {
         Speed = amount;
     }
+    
+    public void SetTeam(Team teamType) {
+        team = teamType;
+    }
 
     public void StoreItem(Item item) {
-        inventory.Add(item);
+        Inventory.Add(item);
     }
     
     public void LearnSpells(params Spell[] spells) {
         foreach (var s in spells) {
             s.SetOwner(this);
         }
-        spellBook.AddRange(spells);
+        SpellBook.AddRange(spells);
     }
     
-    public abstract void UseSkill();
-    public abstract void UseRandomSkill();
+    public abstract void UseSpell();
+    public abstract void UseRandomSpell();
     public abstract void UseItem();
     public abstract void UseRandomItem();
 }

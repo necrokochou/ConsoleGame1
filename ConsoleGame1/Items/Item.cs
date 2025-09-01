@@ -1,7 +1,7 @@
 ﻿namespace ConsoleGame1.Items;
 
 
-abstract class Item {
+public abstract class Item {
     public Item(string name, bool needsTarget) {
         this.name = name;
         this.needsTarget = needsTarget;

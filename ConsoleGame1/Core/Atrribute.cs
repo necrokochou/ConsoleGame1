@@ -4,7 +4,7 @@
 namespace ConsoleGame1.Core;
 
 
-class Attribute {
+public class Attribute {
     public Attribute(string name, float max) {
         this.name = name;
         value = max;
@@ -20,7 +20,7 @@ class Attribute {
     }
 
     public void Display() {
-        Console.WriteLine($"{Util.Capitalize(name)}: {value}/{max}");
+        Util.Print($"{Util.Capitalize(name)}: {value}/{max}");
     }
 
     public void Increase(float amount) {

@@ -8,7 +8,7 @@ namespace ConsoleGame1.Core;
 class Character : Entity {
     public Character(string name, int health, int mana) : base(name, health, mana) { }
 
-    public override void UseSkill() {
+    public override void UseSpell() {
         Console.Write("Select spell > ");
         var spellName = Console.ReadLine();
 
@@ -18,21 +18,40 @@ class Character : Entity {
         foreach (var spell in SpellBook) {
             if (spell.Name == spellName) {
                 spell.Cast(targetName);
-                Console.WriteLine($"{Util.Capitalize(Name)} used {Util.Titlecase(spell.Name)} on {Util.Capitalize(targetName)}");
-                Div.Y();
+                Util.Print($"{Util.Capitalize(Name)} used {Util.Titlecase(spell.Name)} on {Util.Capitalize(targetName)}");
+                Util.Spacer.Y();
             }
         }
     }
     
-    public override void UseRandomSkill() {
+    public override void UseRandomSpell() {
         var rand = new Random();
         
         var spell = SpellBook[rand.Next(SpellBook.Count)];
-        var target = World.Entities[rand.Next(World.Entities.Count)];
+        Entity target;
+        List<Entity> targetsFound = [];
+        var attempts = 0;
+        
+        while (true) {
+            target = World.Entities[rand.Next(World.Entities.Count)];
+            attempts++;
+            if (attempts > World.Entities.Count) {
+                return;
+            }
+            if (targetsFound.Contains(target)) {
+                continue;
+            }
+            if (target.IsDead || target == this || target.Team == Team) {
+                targetsFound.Add(target);
+                continue;
+            }
+            
+            break;
+        }
         
         spell.Cast(target.Name);
-        Console.WriteLine($"{Util.Capitalize(Name)} used {Util.Titlecase(spell.Name)} on {Util.Capitalize(target.Name)}");
-        Div.Y();
+        Util.Print($"{Util.Capitalize(Name)} used {Util.Titlecase(spell.Name)} on {Util.Capitalize(target.Name)}");
+        Util.Spacer.Y();
     }
 
     public override void UseItem() {
