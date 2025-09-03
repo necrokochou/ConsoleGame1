@@ -20,7 +20,7 @@ public class Attribute {
     }
 
     public void Display() {
-        Util.Print($"{Util.Capitalize(name)}: {value}/{max}");
+        Text.PrintLine($"{Text.Capitalize(name)}: {value}/{max}");
     }
 
     public void Increase(float amount) {

@@ -6,7 +6,7 @@ namespace ConsoleGame1.Spells;
 
 
 public abstract class Spell {
-    public Spell(Entity? owner, string name, float damage, float cost, string costType, int cooldown, ITarget? target) {
+    public Spell(Entity owner, string name, float damage, float cost, string costType, int cooldown, ITarget target) {
         this.owner = owner;
         this.name = name;
         this.damage = damage;
@@ -16,55 +16,34 @@ public abstract class Spell {
         this.target = target;
     }
 
-    private Entity? owner;
+    private Entity owner;
     private string name;
     private float damage;
     private float cost;
     private string costType;
     private int cooldown;
-    private ITarget? target;
+    private ITarget target;
 
-    private Entity? Owner {
-        get => owner;
-        set => owner = value;
-    }
     public string Name {
         get => name;
     }
-    private float Damage {
-        get => damage;
-    }
-    private float Cost {
-        get => cost;
-    }
-    private string CostType {
-        get => costType;
-    }
-    private int Cooldown {
-        get => cooldown;
-    }
-    private ITarget? Target {
+    
+    public ITarget Target {
         get => target;
     }
 
     public void Display() {
-        Util.Print($"{Util.Capitalize(Name)} [ {Owner?.Name} - {Damage} - {Cost} {Util.Capitalize(CostType)} ]");
+        Console.WriteLine($"{Text.Capitalize(name)} [ {owner?.Name} - {damage} - {cost} {Text.Capitalize(costType)} ]");
     }
 
-    public void Cast(string targetName) {
-        var spellTarget = GetTarget(targetName);
+    public void Cast(Entity spellTarget) {
         
-        if (!Target.CanTarget(Owner, spellTarget)) {
-            Util.Print("Target is not valid");
-            return;
-        }
-        
-        Util.Print("Casting spell...");
-        Owner?.Mana.Decrease(Cost);
-        spellTarget.Health.Decrease(Damage);
+        Console.WriteLine("Casting spell...");
+        owner.Mana.Decrease(cost);
+        spellTarget.Health.Decrease(damage);
     }
 
-    private Entity? GetTarget(string targetName) {
+    public Entity? GetTarget(string? targetName) {
         foreach (var entity in World.Entities) {
             if (entity.Name == targetName) {
                 return entity;
@@ -75,6 +54,6 @@ public abstract class Spell {
     }
     
     public void SetOwner(Entity spellOwner) {
-        Owner = spellOwner;
+        owner = spellOwner;
     }
 }

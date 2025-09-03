@@ -11,6 +11,13 @@ public interface ICanUseItem {
     void UseRandomItem();
 }
 
+
+public interface ICommand {
+    string Name { get; }
+    
+    void Execute(Entity self);
+}
+
 public interface ITarget {
-    bool CanTarget(Entity caster, Entity target);
+    bool CanTarget(Entity self, Entity target);
 }

@@ -15,4 +15,9 @@ static class World {
             entity.SetSpeed(rand.Next(10));
         }
     }
+    
+    public static Entity GetRandomEntity() {
+        var rand = new Random();
+        return entities[rand.Next(entities.Count)];
+    }
 }

@@ -19,7 +19,7 @@ class BowItem : Item {
     public override void Use(string targetName) {
         var target = GetTarget(targetName);
         
-        Util.Spacer.Y();
+        Spacer.Y();
         target.Health.Decrease(damage);
     }
 
