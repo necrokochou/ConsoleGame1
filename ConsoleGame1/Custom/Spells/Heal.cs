@@ -5,13 +5,13 @@ using ConsoleGame1.Spells;
 namespace ConsoleGame1.Custom.Spells;
 
 
-class Fireball : Spell {
-    public Fireball() : base(
+class Heal : Spell {
+    public Heal() : base(
         "fireball",
         25f, 
         10f, 
         "mana",
         3,
-        new EnemyTarget()
+        new SelfTarget()
     ) {}
 }

@@ -26,6 +26,12 @@ class Program {
         a2.SetTeam(Team.Ally);
         a3.SetTeam(Team.Enemy);
         a4.SetTeam(Team.Enemy);
+
+        var apple = ItemFactory.Create("apple");
+        var lemon = ItemFactory.Create("lemon");
+
+        a1.StoreItems(apple);
+        a3.StoreItems(lemon);
         
         World.Entities.AddRange(a1, a2, a3, a4);
         World.SetRandomSpeed();
@@ -51,27 +57,15 @@ class Program {
             currentTurn.Display();
             currentTurn.TakeTurn();
             
-            var winningTeam = GetWinningTeam();
-            if (winningTeam != null) {
-                Console.WriteLine($"{winningTeam} team wins!\n");
-                foreach (var entity in World.Entities) {
-                    if (entity.Team == winningTeam) {
-                        entity.Display();
-                    }
-                }
-                break;
-            }
-        }
-    }
-    
-    // TODO: Move to World probably
-    private static Team? GetWinningTeam() {
-        var aliveTeams = World.Entities
-            .Where(e => e.IsAlive)
-            .Select(e => e.Team)
-            .Distinct()
-            .ToList();
+            var winningTeam = World.GetWinningTeam();
+            if (winningTeam == null)
+                continue;
 
-        return aliveTeams.Count == 1 ? aliveTeams[0] : null;
+            Console.WriteLine($"{winningTeam} team wins!\n");
+            foreach (var entity in World.Entities.Where(e => e.Team == winningTeam)) {
+                entity.Display();
+            }
+            break;
+        }
     }
 }

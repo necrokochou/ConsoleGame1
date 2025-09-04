@@ -16,13 +16,6 @@ class SwordItem : Item {
         get => damage;
     }
 
-    public override void Use(string targetName) {
-        var target = GetTarget(targetName);
-        
-        Spacer.Y();
-        target.Health.Decrease(damage);
-    }
-
     private Entity GetTarget(string name) {
         foreach (var entity in World.Entities) {
             if (entity.Name == name) {

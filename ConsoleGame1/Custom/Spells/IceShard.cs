@@ -7,7 +7,6 @@ namespace ConsoleGame1.Custom.Spells;
 
 class IceShard : Spell {
     public IceShard() : base(
-        null,
         "ice shard",
         25f, 
         10f, 

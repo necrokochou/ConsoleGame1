@@ -1,4 +1,5 @@
 ﻿using ConsoleGame1.Utils;
+using String = ConsoleGame1.Utils.String;
 
 
 namespace ConsoleGame1.Core;
@@ -20,7 +21,7 @@ public class Attribute {
     }
 
     public void Display() {
-        Text.PrintLine($"{Text.Capitalize(name)}: {value}/{max}");
+        Console.WriteLine($"{String.ToProperCase(name)}: {value}/{max}");
     }
 
     public void Increase(float amount) {

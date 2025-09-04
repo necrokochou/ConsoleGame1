@@ -1,7 +1,11 @@
-﻿namespace ConsoleGame1.Items;
+﻿using ConsoleGame1.Core;
+using ConsoleGame1.Interfaces;
 
 
-public abstract class Item {
+namespace ConsoleGame1.Items;
+
+
+public abstract class Item : IExecutable {
     public Item(string name, bool needsTarget) {
         this.name = name;
         this.needsTarget = needsTarget;
@@ -21,5 +25,7 @@ public abstract class Item {
         get => needsTarget;
     }
 
-    public abstract void Use(string targetName);
+    public virtual Result Execute(Entity self, Entity? target = null) {
+        return Result.Success;
+    }
 }

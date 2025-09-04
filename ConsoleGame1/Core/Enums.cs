@@ -3,5 +3,11 @@
 
 public enum Team {
     Ally,
-    Enemy,
+    Enemy
+}
+
+
+public enum Result { // TODO: Turn into class
+    Success,
+    Fail
 }

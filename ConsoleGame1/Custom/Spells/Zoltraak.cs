@@ -7,7 +7,6 @@ namespace ConsoleGame1.Custom.Spells;
 
 class Zoltraak : Spell {
     public Zoltraak() : base(
-        null,
         "zoltraak",
         25f,
         10f,

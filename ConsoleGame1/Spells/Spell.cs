@@ -1,13 +1,14 @@
 ﻿using ConsoleGame1.Core;
+using ConsoleGame1.Interfaces;
 using ConsoleGame1.Utils;
 
 
 namespace ConsoleGame1.Spells;
 
 
-public abstract class Spell {
-    public Spell(Entity owner, string name, float damage, float cost, string costType, int cooldown, ITarget target) {
-        this.owner = owner;
+public abstract class Spell : IExecutable {
+    public Spell(string name, float damage, float cost, string costType, int cooldown, ITarget? target) {
+        // this.owner = owner;
         this.name = name;
         this.damage = damage;
         this.cost = cost;
@@ -16,44 +17,44 @@ public abstract class Spell {
         this.target = target;
     }
 
-    private Entity owner;
+    // private Entity owner;
     private string name;
     private float damage;
     private float cost;
     private string costType;
     private int cooldown;
-    private ITarget target;
+    private ITarget? target;
 
     public string Name {
         get => name;
     }
     
-    public ITarget Target {
+    public ITarget? Target {
         get => target;
     }
 
-    public void Display() {
-        Console.WriteLine($"{Text.Capitalize(name)} [ {owner?.Name} - {damage} - {cost} {Text.Capitalize(costType)} ]");
-    }
+    // public void Display() {
+    //     Console.WriteLine($"{Text.ToProperCase(name)} [ {owner?.Name} - {damage} - {cost} {Text.ToProperCase(costType)} ]");
+    // }
 
-    public void Cast(Entity spellTarget) {
-        
+    public Result Execute(Entity caster, Entity? spellTarget = null) {
         Console.WriteLine("Casting spell...");
-        owner.Mana.Decrease(cost);
-        spellTarget.Health.Decrease(damage);
-    }
-
-    public Entity? GetTarget(string? targetName) {
-        foreach (var entity in World.Entities) {
-            if (entity.Name == targetName) {
-                return entity;
-            }
-        }
-        
-        return null;
+        caster.Mana.Decrease(cost);
+        spellTarget?.Health.Decrease(damage);
+        return Result.Success;
     }
     
-    public void SetOwner(Entity spellOwner) {
-        owner = spellOwner;
-    }
+    // public Entity? GetTarget(string? targetName) {
+    //     foreach (var entity in World.Entities) {
+    //         if (entity.Name == targetName) {
+    //             return entity;
+    //         }
+    //     }
+    //     
+    //     return null;
+    // }
+    
+    // public void SetOwner(Entity spellOwner) {
+    //     owner = spellOwner;
+    // }
 }

@@ -1,4 +1,7 @@
-﻿namespace ConsoleGame1.Core;
+﻿using ConsoleGame1.Interfaces;
+
+
+namespace ConsoleGame1.Core;
 
 
 public class SelfTarget : ITarget {

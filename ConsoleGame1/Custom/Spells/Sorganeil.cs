@@ -7,7 +7,6 @@ namespace ConsoleGame1.Custom.Spells;
 
 class Sorganeil : Spell {
     public Sorganeil() : base(
-        null,
         "sorganeil",
         25f,
         10f,

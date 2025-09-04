@@ -16,8 +16,21 @@ static class World {
         }
     }
     
+    public static Entity? GetEntityByName(string name) {
+        return entities.Find(e => e.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+    }
+    
     public static Entity GetRandomEntity() {
         var rand = new Random();
         return entities[rand.Next(entities.Count)];
+    }
+
+    public static Team? GetWinningTeam() { 
+        var aliveTeams = entities.Where(e => e.IsAlive)
+            .Select(e => e.Team)
+            .Distinct()
+            .ToList();
+        
+        return aliveTeams.Count == 1 ? aliveTeams[0] : null;
     }
 }
