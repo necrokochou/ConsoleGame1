@@ -44,3 +44,4 @@ packages/
 # Others
 _ReSharper*/
 *.DotSettings.user
+Properties/
