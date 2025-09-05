@@ -27,6 +27,10 @@ public interface IExecutable : INameable {
     }
 }
 
+public interface IEffect {
+    void Apply(Entity target);
+}
+
 
 public interface ITarget {
     bool CanTarget(Entity self, Entity target);

@@ -17,7 +17,7 @@ class Program {
         var a3 = CharacterFactory.Create("A3", 100, 100);
         var a4 = CharacterFactory.Create("A4", 100, 100);
         
-        a1.LearnSpells(new Zoltraak());
+        a1.LearnSpells(new Zoltraak(), new Heal());
         a2.LearnSpells(new Reelseiden(), new Sorganeil());
         a3.LearnSpells(new Fireball(), new IceShard());
         a4.LearnSpells(new Fireball(), new IceShard());
@@ -26,12 +26,6 @@ class Program {
         a2.SetTeam(Team.Ally);
         a3.SetTeam(Team.Enemy);
         a4.SetTeam(Team.Enemy);
-
-        var apple = ItemFactory.Create("apple");
-        var lemon = ItemFactory.Create("lemon");
-
-        a1.StoreItems(apple);
-        a3.StoreItems(lemon);
         
         World.Entities.AddRange(a1, a2, a3, a4);
         World.SetRandomSpeed();
@@ -41,15 +35,15 @@ class Program {
 
         while (true) {
             var turnOrder = World.Entities
-                .Where(e => e.IsAlive)
                 .OrderByDescending(e => e.Speed)
                 .ToList();
             
             if (turnOrder.Count == 0) break;
             
             var currentTurn = turnOrder[turn % turnOrder.Count];
-
             turn++;
+            
+            if (!currentTurn.IsAlive) continue;
             
             Console.WriteLine($"Turn {++turnDisplay}");
             Spacer.Y();

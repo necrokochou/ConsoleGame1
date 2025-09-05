@@ -6,23 +6,23 @@ namespace ConsoleGame1.Items;
 
 
 public abstract class Item : IExecutable {
-    public Item(string name, bool needsTarget) {
+    public Item(string name, ITarget? target = null) {
         this.name = name;
-        this.needsTarget = needsTarget;
+        this.target = target;
     }
     
     private string name;
+    private ITarget? target;
     private int count;
-    private bool needsTarget;
     
     public string Name {
         get => name;
     }
+    public ITarget? Target {
+        get => target;
+    }
     public int Count {
         get => count;
-    }
-    public bool NeedsTarget {
-        get => needsTarget;
     }
 
     public virtual Result Execute(Entity self, Entity? target = null) {

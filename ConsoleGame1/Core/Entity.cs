@@ -121,7 +121,6 @@ public abstract class Entity : INameable {
         }
 
         Spell? spell;
-        Entity? target;
 
         while (true) {
             UserInterface.DisplayAsChoices(spellBook);
@@ -135,6 +134,8 @@ public abstract class Entity : INameable {
         }
 
         if (spell.Target is not SelfTarget) {
+            Entity? target;
+            
             while (true) {
                 UserInterface.DisplayAsChoices(World.Entities);
                 var targetName = UserInterface.GetInput("Select target", false);
@@ -208,7 +209,6 @@ public abstract class Entity : INameable {
         }
 
         Item? item;
-        Entity? target;
 
         while (true) {
             UserInterface.DisplayAsChoices(inventory);
@@ -218,7 +218,9 @@ public abstract class Entity : INameable {
             Console.WriteLine("Item not found");
         }
 
-        if (item.NeedsTarget) {
+        if (item.Target is not SelfTarget) {
+            Entity? target;
+            
             while (true) {
                 UserInterface.DisplayAsChoices(World.Entities);
                 var targetName = UserInterface.GetInput("Select target", false);
@@ -239,13 +241,7 @@ public abstract class Entity : INameable {
     }
 
     private Item? GetItem(string? name) {
-        foreach (Item item in inventory) {
-            if (item.Name == name) {
-                return item;
-            }
-        }
-
-        return null;
+        return inventory.FirstOrDefault(item => item.Name == name);
     }
 
     public virtual Result UseRandomItem() {
@@ -257,7 +253,7 @@ public abstract class Entity : INameable {
         var rand = new Random();
 
         var item = inventory[rand.Next(inventory.Count)];
-        if (item.NeedsTarget) {
+        if (item.Target is not SelfTarget) {
             Entity target;
             List<Entity> targetsFound = [];
             
